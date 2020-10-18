@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+
+  wise-api:
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./backend/app:/app
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+    command: /start-reload.sh
