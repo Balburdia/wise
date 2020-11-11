@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from app.core.config import settings
 from jose import jwt
+
+from app.core.config import settings
 
 
 def generate_password_reset_token(email: str) -> str:
