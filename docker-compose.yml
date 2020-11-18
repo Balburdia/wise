@@ -1,0 +1,47 @@
+version: "3.3"
+services:
+
+  wise-db:
+    image: postgres:12
+    container_name: wise-db
+    volumes:
+      - wise-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - app-variables.env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  wise-pgadmin:
+    image: dpage/pgadmin4
+    container_name: wise-pgadmin
+    networks:
+      - wise
+      - default
+    depends_on:
+      - wise-db
+    env_file:
+      - app-variables.env
+    ports:
+      - "5050:5050"
+
+  wise-api:
+    container_name: wise-api
+    depends_on:
+      - wise-db
+    env_file:
+      - app-variables.env
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend/app:/app
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+    command: /start-reload.sh
+
+volumes:
+  wise-db-data:
+
+networks:
+  wise:
+    external: false
